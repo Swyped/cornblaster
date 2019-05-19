@@ -1,23 +1,28 @@
 package com.cornblaster.engine;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+
 public class GameContainer implements Runnable {
 	private Thread thread;
 	private Window window;
+	private Renderer renderer;
+	private Input input;
 	private boolean  running = false;
 	private final double UPDATE_CAP = 1.0/60.0;
-	private int width = 1600, height  = 900;
-	private float scale = 1;
+	private int width = 512, height  = 288;
+	private float scale = 3f;
 	private String title = "CornBlaster Engine V0.1";
 	
 			
-	private void dispose() {
-		
-	}
+
 	public GameContainer() {
 		
 	}
 	public void start() {
 		window = new Window(this);
+		renderer = new Renderer(this);
+		input = new Input(this);
 		thread = new Thread(this);
 		thread.run();
 	}
@@ -33,17 +38,29 @@ public class GameContainer implements Runnable {
 		double unprocessedTime=0;
 		while(running) {
 			render = false;
-			firstTime = System.nanoTime() / 1000000000.0f;
+			firstTime = System.nanoTime() / 1000000000.0;
 			passedTime = firstTime-lastTime;
 			lastTime = firstTime;
 			unprocessedTime+=passedTime;
 			while(unprocessedTime>=UPDATE_CAP) {
 				unprocessedTime-=UPDATE_CAP;
 				render = true;
-				System.out.println("Update");
+				// System.out.println("Update");
+				if(input.isKey(KeyEvent.VK_A)) {
+					System.out.println("A is Pressed");
+				}
+				if(input.isButton(MouseEvent.BUTTON1)) {
+					System.out.println("MOUSE 1 is Pressed");
+				}
+				// System.out.println("x:" + input.getMouseX()+ " y:" + input.getMouseY());
+				
+				
+				
 				//TODO
+				input.update(); // Always Last
 			}
 			if(render) {
+				renderer.clear();
 				//TODO
 				window.update();
 			}
@@ -57,7 +74,7 @@ public class GameContainer implements Runnable {
 			}
 		}		
 	}
-	dispose();
+
 	public static void main(String args[]) {
 		GameContainer gc = new GameContainer();
 		gc.start();
@@ -86,5 +103,8 @@ public class GameContainer implements Runnable {
 	}
 	public void setTitle(String title) {
 		this.title = title;
+	}
+	public Window getWindow() {
+		return window;
 	}
 }

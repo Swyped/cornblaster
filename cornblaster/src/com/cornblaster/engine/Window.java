@@ -11,7 +11,7 @@ import javax.swing.JFrame;
 
 public class Window {
 	private JFrame frame;
-	private BufferedImage image;
+	private static BufferedImage image;
 	private Canvas canvas;
 	private Graphics g;
 	private BufferStrategy bs;
@@ -43,6 +43,15 @@ public class Window {
 		
 		
 		
+	}
+	public static BufferedImage getImage() {
+		return image;
+	}
+	public Canvas getCanvas() {
+		return canvas;
+	}
+	public JFrame getFrame() {
+		return frame;
 	}
 	
 	
